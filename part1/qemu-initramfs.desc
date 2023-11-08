@@ -1,0 +1,4 @@
+dir     /bin                                          0755 0 0
+file    /bin/busybox  busybox                         0755 0 0
+slink   /bin/sh       /bin/busybox                    0755 0 0
+file    /init         qemu-init.sh                    0755 0 0

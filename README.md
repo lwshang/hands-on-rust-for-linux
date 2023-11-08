@@ -4,4 +4,6 @@ Rust has become the second official language for Linux kernel development since 
 
 I'm curious what it would be like to develop a driver using Rust. Let's figure it out.
 
-## 0. Preparation
+## Part 1
+
+[Compile a kernel with Rust support and run it in QEMU](part1/index.md)
