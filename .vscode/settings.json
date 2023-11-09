@@ -1,0 +1,5 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "linux/build/rust-project.json"
+    ],
+}
