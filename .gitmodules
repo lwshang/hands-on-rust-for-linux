@@ -1,3 +1,6 @@
 [submodule "linux"]
 	path = linux
 	url = git@github.com:lwshang/linux.git
+[submodule "e1000-driver"]
+	path = e1000-driver
+	url = git@github.com:lwshang/e1000-driver.git
