@@ -4,3 +4,6 @@
 [submodule "e1000-driver"]
 	path = e1000-driver
 	url = git@github.com:lwshang/e1000-driver.git
+[submodule "busybox"]
+	path = busybox
+	url = git://git.busybox.net/busybox
