@@ -11,3 +11,7 @@ I'm curious what it would be like to develop a driver using Rust. Let's figure i
 ## Part 2
 
 [Build a minimal kernel module in Rust](part2/index.md)
+
+## Part 3
+
+[Build an out-of-tree driver for e1000](part3/index.md)

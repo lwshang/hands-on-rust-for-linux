@@ -1,1 +1,5 @@
 qemu-initramfs.img
+part1/busybox
+part2/busybox
+part3/rootfs/
+part3/rootfs_img
