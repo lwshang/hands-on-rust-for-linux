@@ -147,3 +147,88 @@ The output will be like:
 ```
 
 When we run `ping 192.168.100.224` in the host, the guest will show more correspongding logs on its console.
+
+## Define a kernel function and call it from the Rust module
+
+### Create a header file in linux include directory
+
+Add `linux/include/linux/demo.h` file with following contents:
+
+```C
+#ifndef _DEMO_H_
+#define _DEMO_H_
+
+#include <linux/printk.h>
+
+static inline void demo_print(void)
+{
+	pr_info("Hello from demo!\n");
+}
+
+#endif /* _DEMO_H_ */
+```
+
+### Include the header in `bindings_helper.h`
+
+Modify `linux/rust/bindings/bindings_helper.h`:
+
+```diff
+ #include <linux/cdev.h>
+ #include <linux/clk.h>
++#include <linux/demo.h>
+ #include <linux/errname.h>
+ #include <linux/file.h>
+```
+
+### Add binding with `rust_helper_` prefix
+
+Modify `linux/rust/helpers.c`:
+
+```diff
+ #include <linux/clk.h>
++#include <linux/demo.h>
+ #include <linux/errname.h>
+```
+
+```diff
+ EXPORT_SYMBOL_GPL(rust_helper_ndelay);
+
++void rust_helper_demo_print(void) {
++       demo_print();
++}
++EXPORT_SYMBOL_GPL(rust_helper_demo_print);
++
+ /*
+```
+
+### Call it in the Rust module
+
+Modify the `init` method in `e1000-driver/src/e1000_for_linux.rs`:
+
+```diff
+     fn init(name: &'static CStr, module: &'static ThisModule) -> Result<Self> {
+         pr_info!("Rust e1000 device driver (init)\n");
+
++        unsafe { bindings::demo_print() };
++
+         let dev = driver::Registration::<pci::Adapter<E1000Driver>>::new_pinned(name, module)?;
+         Ok(RustE1000dev { dev })
+     }
+```
+
+### Check the result in QEMU
+
+Make the kernel and the Rust module as previous steps. Then we rerun QEMU to check the result.
+
+The output will be like:
+
+```
+[    2.077796] Run /init as init process
+[    2.102144] mount (71) used greatest stack depth: 13872 bytes left
+[    2.127484] e1000_for_linux: loading out-of-tree module taints kernel.
+[    2.135006] rust_e1000dev: Rust e1000 device driver (init)
+[    2.135299] Hello from demo!
+[    2.135650] rust_e1000dev: PCI Driver probing Some(1)
+```
+
+The message in `demo_print` function is printed as expected.
